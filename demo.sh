@@ -1,13 +1,13 @@
 #!/bin/bash
 
-echo "🦀 Демонстрация Rust Package Manager"
-echo "===================================="
+echo "🦀 Rust Package Manager Demonstration"
+echo "====================================="
 echo ""
 
-echo "Запускаем пакетный менеджер с набором демонстрационных команд..."
+echo "Running package manager with a set of demonstration commands..."
 echo ""
 
-# Создаем файл с командами для демонстрации
+# Create file with demonstration commands
 cat << 'EOF' > demo_commands.txt
 help
 available
@@ -23,37 +23,37 @@ search python
 exit
 EOF
 
-echo "Выполняемые команды:"
-echo "1. help - показать справку"
-echo "2. available - показать доступные пакеты"
-echo "3. install firefox - установить Firefox (версия по умолчанию 0.1.0)"
-echo "4. install python 3.12.0 - установить Python с указанной версией"
-echo "5. install custompackage - установить пользовательский пакет"
-echo "6. list - показать установленные пакеты"
-echo "7. search browser - поиск пакетов с 'browser'"
-echo "8. search database - поиск пакетов с 'database'"
-echo "9. remove firefox - удалить Firefox"
-echo "10. list - показать обновленный список"
-echo "11. search python - поиск пакетов с 'python'"
-echo "12. exit - выход"
+echo "Commands to be executed:"
+echo "1. help - show help"
+echo "2. available - show available packages"
+echo "3. install firefox - install Firefox (default version 0.1.0)"
+echo "4. install python 3.12.0 - install Python with specified version"
+echo "5. install custompackage - install custom package"
+echo "6. list - show installed packages"
+echo "7. search browser - search packages with 'browser'"
+echo "8. search database - search packages with 'database'"
+echo "9. remove firefox - remove Firefox"
+echo "10. list - show updated list"
+echo "11. search python - search packages with 'python'"
+echo "12. exit - exit"
 echo ""
 
-echo "Нажмите Enter для начала демонстрации..."
+echo "Press Enter to start demonstration..."
 read
 
-# Запускаем программу с командами из файла
+# Run program with commands from file
 cargo run < demo_commands.txt
 
 echo ""
-echo "Демонстрация завершена!"
+echo "Demonstration completed!"
 echo ""
-echo "Содержимое файла packages.json после демонстрации:"
-echo "================================================="
+echo "Contents of packages.json file after demonstration:"
+echo "==================================================="
 cat packages.json | head -20
 echo "..."
 echo ""
 
-# Удаляем временный файл
+# Remove temporary file
 rm demo_commands.txt
 
-echo "Для интерактивного использования запустите: cargo run"
+echo "For interactive use, run: cargo run"

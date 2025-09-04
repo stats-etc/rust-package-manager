@@ -1,4 +1,4 @@
-# Makefile для Rust Package Manager
+# Makefile for Rust Package Manager
 
 .PHONY: build run test clean demo help install release
 
@@ -7,148 +7,148 @@ CARGO = cargo
 TARGET_DIR = target
 BINARY_NAME = rust-package-manager
 
-# По умолчанию - сборка проекта
+# Default - build project
 all: build
 
-# Сборка проекта
+# Build project
 build:
-	@echo "🔨 Сборка проекта..."
+	@echo "🔨 Building project..."
 	$(CARGO) build
 
-# Сборка в release режиме
+# Build in release mode
 release:
-	@echo "🚀 Сборка release версии..."
+	@echo "🚀 Building release version..."
 	$(CARGO) build --release
 
-# Запуск программы
+# Run program
 run:
-	@echo "▶️  Запуск программы..."
+	@echo "▶️  Running program..."
 	$(CARGO) run
 
-# Запуск тестов
+# Run tests
 test:
-	@echo "🧪 Запуск тестов..."
+	@echo "🧪 Running tests..."
 	$(CARGO) test
 
-# Запуск тестов с подробным выводом
+# Run tests with verbose output
 test-verbose:
-	@echo "🧪 Запуск тестов (подробный вывод)..."
+	@echo "🧪 Running tests (verbose output)..."
 	$(CARGO) test -- --nocapture
 
-# Проверка кода
+# Check code
 check:
-	@echo "🔍 Проверка кода..."
+	@echo "🔍 Checking code..."
 	$(CARGO) check
 
-# Форматирование кода
+# Format code
 fmt:
-	@echo "✨ Форматирование кода..."
+	@echo "✨ Formatting code..."
 	$(CARGO) fmt
 
-# Линтинг кода
+# Lint code
 lint:
-	@echo "📋 Линтинг кода..."
+	@echo "📋 Linting code..."
 	$(CARGO) clippy -- -D warnings
 
-# Очистка сборочных файлов
+# Clean build files
 clean:
-	@echo "🧹 Очистка сборочных файлов..."
+	@echo "🧹 Cleaning build files..."
 	$(CARGO) clean
 	rm -f packages.json
 
-# Полная очистка (включая packages.json)
+# Full cleanup (including packages.json)
 clean-all: clean
-	@echo "🗑️  Полная очистка..."
+	@echo "🗑️  Full cleanup..."
 	rm -f packages.json demo_commands.txt
 
-# Демонстрация функций
+# Demo functions
 demo:
-	@echo "🎬 Демонстрация функций..."
+	@echo "🎬 Demo functions..."
 	@./demo.sh
 
-# Быстрый тест основных функций
+# Quick test of main functions
 quick-demo:
-	@echo "⚡ Быстрая демонстрация..."
+	@echo "⚡ Quick demonstration..."
 	@printf "available\ninstall firefox\ninstall python 3.12.0\nlist\nsearch browser\nremove firefox\nlist\nexit\n" | $(CARGO) run
 
-# Установка зависимостей (обновление)
+# Install dependencies (update)
 deps:
-	@echo "📦 Обновление зависимостей..."
+	@echo "📦 Updating dependencies..."
 	$(CARGO) update
 
-# Генерация документации
+# Generate documentation
 doc:
-	@echo "📚 Генерация документации..."
+	@echo "📚 Generating documentation..."
 	$(CARGO) doc --open
 
-# Проверка форматирования без изменений
+# Check formatting without changes
 check-fmt:
-	@echo "🔎 Проверка форматирования..."
+	@echo "🔎 Checking formatting..."
 	$(CARGO) fmt -- --check
 
-# Полная проверка перед коммитом
+# Full check before commit
 pre-commit: check-fmt lint test
-	@echo "✅ Все проверки пройдены!"
+	@echo "✅ All checks passed!"
 
-# Установка программы в систему
+# Install program to system
 install-system: release
-	@echo "📥 Установка в систему..."
+	@echo "📥 Installing to system..."
 	cp $(TARGET_DIR)/release/$(BINARY_NAME) /usr/local/bin/rpm-rust || \
 	cp $(TARGET_DIR)/release/$(BINARY_NAME) ~/.local/bin/rpm-rust || \
-	echo "❌ Не удалось установить. Скопируйте $(TARGET_DIR)/release/$(BINARY_NAME) вручную"
+	echo "❌ Failed to install. Copy $(TARGET_DIR)/release/$(BINARY_NAME) manually"
 
-# Бенчмарки (если будут добавлены)
+# Benchmarks (if added)
 bench:
-	@echo "📊 Запуск бенчмарков..."
+	@echo "📊 Running benchmarks..."
 	$(CARGO) bench
 
-# Информация о проекте
+# Project information
 info:
-	@echo "ℹ️  Информация о проекте:"
-	@echo "  Название: Rust Package Manager"
-	@echo "  Версия: $(shell grep version Cargo.toml | head -n1 | cut -d'"' -f2)"
-	@echo "  Язык: Rust $(shell rustc --version | cut -d' ' -f2)"
+	@echo "ℹ️  Project information:"
+	@echo "  Name: Rust Package Manager"
+	@echo "  Version: $(shell grep version Cargo.toml | head -n1 | cut -d'"' -f2)"
+	@echo "  Language: Rust $(shell rustc --version | cut -d' ' -f2)"
 	@echo "  Cargo: $(shell cargo --version | cut -d' ' -f2)"
 
-# Помощь
+# Help
 help:
-	@echo "🦀 Rust Package Manager - Доступные команды:"
+	@echo "🦀 Rust Package Manager - Available commands:"
 	@echo ""
-	@echo "Сборка:"
-	@echo "  build         - Сборка проекта в debug режиме"
-	@echo "  release       - Сборка в release режиме"
+	@echo "Build:"
+	@echo "  build         - Build project in debug mode"
+	@echo "  release       - Build in release mode"
 	@echo ""
-	@echo "Запуск:"
-	@echo "  run           - Запуск программы"
-	@echo "  demo          - Демонстрация функций (через demo.sh)"
-	@echo "  quick-demo    - Быстрая демонстрация основных функций"
+	@echo "Run:"
+	@echo "  run           - Run program"
+	@echo "  demo          - Demo functions (via demo.sh)"
+	@echo "  quick-demo    - Quick demonstration of main functions"
 	@echo ""
-	@echo "Тестирование:"
-	@echo "  test          - Запуск тестов"
-	@echo "  test-verbose  - Запуск тестов с подробным выводом"
-	@echo "  bench         - Запуск бенчмарков"
+	@echo "Testing:"
+	@echo "  test          - Run tests"
+	@echo "  test-verbose  - Run tests with verbose output"
+	@echo "  bench         - Run benchmarks"
 	@echo ""
-	@echo "Качество кода:"
-	@echo "  check         - Проверка кода без сборки"
-	@echo "  fmt           - Форматирование кода"
-	@echo "  check-fmt     - Проверка форматирования"
-	@echo "  lint          - Линтинг с clippy"
-	@echo "  pre-commit    - Полная проверка перед коммитом"
+	@echo "Code quality:"
+	@echo "  check         - Check code without building"
+	@echo "  fmt           - Format code"
+	@echo "  check-fmt     - Check formatting"
+	@echo "  lint          - Lint with clippy"
+	@echo "  pre-commit    - Full check before commit"
 	@echo ""
-	@echo "Документация:"
-	@echo "  doc           - Генерация и открытие документации"
+	@echo "Documentation:"
+	@echo "  doc           - Generate and open documentation"
 	@echo ""
-	@echo "Управление:"
-	@echo "  deps          - Обновление зависимостей"
-	@echo "  clean         - Очистка сборочных файлов"
-	@echo "  clean-all     - Полная очистка"
-	@echo "  install-system- Установка в систему"
+	@echo "Management:"
+	@echo "  deps          - Update dependencies"
+	@echo "  clean         - Clean build files"
+	@echo "  clean-all     - Full cleanup"
+	@echo "  install-system- Install to system"
 	@echo ""
-	@echo "Информация:"
-	@echo "  info          - Информация о проекте"
-	@echo "  help          - Эта справка"
+	@echo "Information:"
+	@echo "  info          - Project information"
+	@echo "  help          - This help"
 
-# Создание архива с исходниками
+# Create source archive
 archive:
-	@echo "📦 Создание архива..."
+	@echo "📦 Creating archive..."
 	tar -czf rust-package-manager.tar.gz --exclude=$(TARGET_DIR) --exclude=packages.json .

@@ -1,28 +1,28 @@
-# 📚 Примеры использования Rust Package Manager
+# 📚 Rust Package Manager Usage Examples
 
-## Базовые операции
+## Basic Operations
 
-### Запуск программы
+### Running the program
 ```bash
 cargo run
 ```
 
-### Получение справки
+### Getting help
 ```
 rpm> help
 ```
 
-## Работа с пакетами
+## Working with Packages
 
-### Просмотр доступных пакетов
+### Viewing available packages
 ```
 rpm> available
 ```
 
-Вывод:
+Output:
 ```
-Доступные пакеты:
-Название             Версия          Описание
+Available packages:
+Name                 Version         Description
 ------------------------------------------------------------
 apache               2.4.57          Apache HTTP Server
 chrome               119.0.6045      Google Chrome browser
@@ -33,85 +33,85 @@ firefox              118.0.1         Mozilla Firefox web browser
 ...
 ```
 
-### Установка пакетов
+### Installing packages
 
-#### Установка с версией по умолчанию (0.1.0)
+#### Install with default version (0.1.0)
 ```
 rpm> install firefox
-✓ Пакет 'firefox' версии 0.1.0 успешно установлен
+✓ Package 'firefox' version 0.1.0 successfully installed
 ```
 
-#### Установка с указанием версии
+#### Install with specified version
 ```
 rpm> install python 3.12.0
-✓ Пакет 'python' версии 3.12.0 успешно установлен
+✓ Package 'python' version 3.12.0 successfully installed
 ```
 
-#### Установка пользовательского пакета
+#### Install custom package
 ```
 rpm> install myapp 2.5.0
-✓ Пакет 'myapp' версии 2.5.0 успешно установлен
+✓ Package 'myapp' version 2.5.0 successfully installed
 ```
 
-### Просмотр установленных пакетов
+### Viewing installed packages
 ```
 rpm> list
 ```
 
-Вывод:
+Output:
 ```
-Установленные пакеты:
-Название             Версия          Описание
+Installed packages:
+Name                 Version         Description
 ------------------------------------------------------------
 firefox              0.1.0           Mozilla Firefox web browser
-myapp                2.5.0           Пользовательский пакет
+myapp                2.5.0           Custom package
 python               3.12.0          Python programming language
 ```
 
-### Удаление пакетов
+### Removing packages
 ```
 rpm> remove firefox
-✓ Пакет 'firefox' версии 0.1.0 успешно удален
+✓ Package 'firefox' version 0.1.0 successfully removed
 ```
 
-## Поиск пакетов
+## Package Search
 
-### Поиск по названию
+### Search by name
 ```
 rpm> search python
 ```
 
-Вывод:
+Output:
 ```
-Найденные пакеты по запросу 'python':
-Название             Версия          Описание
+Found packages for query 'python':
+Name                 Version         Description
 ------------------------------------------------------------
-python               3.11.6          Python programming language [УСТАНОВЛЕН]
+python               3.11.6          Python programming language [INSTALLED]
 ```
 
-### Поиск по описанию
+### Search by description
 ```
 rpm> search browser
 ```
 
-Вывод:
+Output:
 ```
-Найденные пакеты по запросу 'browser':
-Название             Версия          Описание
+Found packages for query 'browser':
+Name                 Version         Description
 ------------------------------------------------------------
 chrome               119.0.6045      Google Chrome browser
 firefox              118.0.1         Mozilla Firefox web browser
 ```
 
-### Поиск по частичному совпадению
+### Search by partial match
 ```
 rpm> search data
 ```
 
-Вывод:
+Output:
 ```
-Найденные пакеты по запросу 'data':
-Название             Версия          Описание
+Found packages for query 'data':
+Name                 Version         Description
 ------------------------------------------------------------
 curl                 8.4.0           Command line tool for transferring data
 mongodb              7.0.2           Document database
@@ -120,9 +120,9 @@ postgresql           16.0            PostgreSQL database
 redis                7.2.3           In-memory data structure store
 ```
 
-## Сценарии использования
+## Usage Scenarios
 
-### Сценарий 1: Настройка среды разработки
+### Scenario 1: Setting up development environment
 ```
 rpm> install git 2.42.0
 rpm> install vscode 1.84.2
@@ -131,7 +131,7 @@ rpm> install python 3.11.6
 rpm> list
 ```
 
-### Сценарий 2: Установка веб-сервера
+### Scenario 2: Installing web server
 ```
 rpm> install nginx 1.24.0
 rpm> install mysql 8.0.35
@@ -139,7 +139,7 @@ rpm> install redis 7.2.3
 rpm> available
 ```
 
-### Сценарий 3: Поиск и установка редакторов
+### Scenario 3: Finding and installing editors
 ```
 rpm> search editor
 rpm> install vim
@@ -147,7 +147,7 @@ rpm> install emacs
 rpm> list
 ```
 
-### Сценарий 4: Очистка системы
+### Scenario 4: System cleanup
 ```
 rpm> list
 rpm> remove vim
@@ -155,48 +155,48 @@ rpm> remove emacs
 rpm> list
 ```
 
-## Обработка ошибок
+## Error Handling
 
-### Попытка установить уже установленный пакет
+### Attempting to install already installed package
 ```
 rpm> install python
 rpm> install python
-❌ Ошибка: Пакет 'python' уже установлен
+❌ Error: Package 'python' is already installed
 ```
 
-### Попытка удалить несуществующий пакет
+### Attempting to remove non-existent package
 ```
 rpm> remove nonexistent
-❌ Ошибка: Пакет 'nonexistent' не найден среди установленных
+❌ Error: Package 'nonexistent' not found among installed packages
 ```
 
-### Неверная команда
+### Invalid command
 ```
 rpm> invalidcommand
-❌ Неизвестная команда: 'invalidcommand'
-Введите 'help' для справки
+❌ Unknown command: 'invalidcommand'
+Type 'help' for help
 ```
 
-### Отсутствие аргументов
+### Missing arguments
 ```
 rpm> install
-❌ Ошибка: укажите название пакета
+❌ Error: please specify package name
 
 rpm> remove
-❌ Ошибка: укажите название пакета
+❌ Error: please specify package name
 
 rpm> search
-❌ Ошибка: укажите поисковый запрос
+❌ Error: please specify search query
 ```
 
-## Автоматизация
+## Automation
 
-### Использование с пайпом
+### Using with pipe
 ```bash
-echo -e "install firefox\ninstall python 3.12.0\nlist\nexit" | cargo run
+printf "install firefox\ninstall python 3.12.0\nlist\nexit\n" | cargo run
 ```
 
-### Создание скрипта команд
+### Creating command script
 ```bash
 cat << 'EOF' > commands.txt
 available
@@ -211,10 +211,10 @@ EOF
 cargo run < commands.txt
 ```
 
-## Состояние данных
+## Data State
 
-### Файл packages.json
-После установки нескольких пакетов файл `packages.json` будет содержать:
+### packages.json file
+After installing several packages, the `packages.json` file will contain:
 
 ```json
 {
@@ -231,20 +231,20 @@ cargo run < commands.txt
     }
   },
   "available": {
-    // ... все доступные пакеты
+    // ... all available packages
   }
 }
 ```
 
-### Персистентность данных
-- Данные сохраняются автоматически после каждой операции установки/удаления
-- При перезапуске программы состояние восстанавливается из файла
-- Если файл отсутствует, создается новый с пустым списком установленных пакетов
+### Data persistence
+- Data is automatically saved after each install/remove operation
+- When restarting the program, state is restored from file
+- If file is missing, a new one is created with empty installed packages list
 
-## Советы по использованию
+## Usage Tips
 
-1. **Используйте поиск** для нахождения нужных пакетов перед установкой
-2. **Указывайте версии** для точного контроля версий пакетов
-3. **Регулярно проверяйте** список установленных пакетов командой `list`
-4. **Создавайте скрипты** для автоматизации установки наборов пакетов
-5. **Делайте резервные копии** файла `packages.json` для сохранения состояния
+1. **Use search** to find needed packages before installation
+2. **Specify versions** for precise version control of packages
+3. **Regularly check** the list of installed packages with `list` command
+4. **Create scripts** to automate installation of package sets
+5. **Make backups** of `packages.json` file to preserve state

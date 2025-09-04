@@ -1,76 +1,76 @@
 # 🦀 Rust Package Manager (RPM)
 
-Простейший аналог пакетного менеджера наподобие apt-get, написанный на Rust.
+A simple package manager similar to apt-get, written in Rust.
 
-## Особенности
+## Features
 
-- ✅ Установка и удаление пакетов
-- ✅ Список установленных пакетов
-- ✅ Поиск пакетов по названию и описанию
-- ✅ Автоматическое назначение версии 0.1.0 если не указана
-- ✅ Сохранение данных в JSON файле
-- ✅ 20 предустановленных тестовых пакетов
-- ✅ Интерактивный интерфейс командной строки
+- ✅ Install and remove packages
+- ✅ List installed packages
+- ✅ Search packages by name and description
+- ✅ Auto-assign version 0.1.0 if not specified
+- ✅ Save data in JSON file
+- ✅ 20 pre-installed test packages
+- ✅ Interactive command-line interface
 
-## Установка и запуск
+## Installation and Running
 
 ```bash
-# Клонируйте проект и перейдите в директорию
+# Clone the project and navigate to directory
 cd rust-package-manager
 
-# Соберите проект
+# Build the project
 cargo build --release
 
-# Запустите
+# Run
 cargo run
 ```
 
-## Команды
+## Commands
 
-### Основные команды:
+### Basic commands:
 
-- `install <название> [версия]` - Установить пакет
-- `remove <название>` - Удалить пакет  
-- `list` - Показать установленные пакеты
-- `available` - Показать все доступные пакеты
-- `search <запрос>` - Поиск пакетов по названию или описанию
-- `help` - Показать справку
-- `exit` - Выйти из программы
+- `install <name> [version]` - Install package
+- `remove <name>` - Remove package  
+- `list` - Show installed packages
+- `available` - Show all available packages
+- `search <query>` - Search packages by name or description
+- `help` - Show help
+- `exit` - Exit the program
 
-### Примеры использования:
+### Usage examples:
 
 ```bash
-# Установить пакет с автоматической версией 0.1.0
+# Install package with automatic version 0.1.0
 rpm> install firefox
 
-# Установить пакет с указанной версией
+# Install package with specified version
 rpm> install python 3.11.6
 
-# Удалить пакет
+# Remove package
 rpm> remove firefox
 
-# Показать установленные пакеты
+# Show installed packages
 rpm> list
 
-# Показать все доступные пакеты
+# Show all available packages
 rpm> available
 
-# Поиск по названию
+# Search by name
 rpm> search python
 
-# Поиск по описанию
+# Search by description
 rpm> search browser
 
-# Выйти
+# Exit
 rpm> exit
 ```
 
-## Предустановленные тестовые пакеты
+## Pre-installed Test Packages
 
-Система включает 20 популярных программ для тестирования:
+The system includes 20 popular programs for testing:
 
-| Название | Версия | Описание |
-|----------|--------|----------|
+| Name | Version | Description |
+|------|---------|-------------|
 | firefox | 118.0.1 | Mozilla Firefox web browser |
 | chrome | 119.0.6045 | Google Chrome browser |
 | vscode | 1.84.2 | Visual Studio Code editor |
@@ -92,9 +92,9 @@ rpm> exit
 | mongodb | 7.0.2 | Document database |
 | curl | 8.4.0 | Command line tool for transferring data |
 
-## Структура данных
+## Data Structure
 
-Пакеты сохраняются в файле `packages.json` в формате:
+Packages are saved in `packages.json` file in format:
 
 ```json
 {
@@ -106,25 +106,25 @@ rpm> exit
     }
   },
   "available": {
-    // ... все доступные пакеты
+    // ... all available packages
   }
 }
 ```
 
-## Архитектура
+## Architecture
 
-Проект состоит из основных компонентов:
+The project consists of main components:
 
-- `Package` - структура для представления пакета
-- `PackageDatabase` - база данных установленных и доступных пакетов
-- Интерактивный цикл команд с обработкой ввода пользователя
-- Сохранение/загрузка состояния в/из JSON файла
+- `Package` - structure for representing a package
+- `PackageDatabase` - database of installed and available packages
+- Interactive command loop with user input processing
+- Save/load state to/from JSON file
 
-## Зависимости
+## Dependencies
 
-- `serde` - для сериализации структур данных
-- `serde_json` - для работы с JSON форматом
+- `serde` - for data structure serialization
+- `serde_json` - for working with JSON format
 
-## Лицензия
+## License
 
 MIT License

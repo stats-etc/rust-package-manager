@@ -23,7 +23,7 @@ impl PackageDatabase {
             available: HashMap::new(),
         };
 
-        // Добавляем тестовые пакеты в базу доступных
+        // Add test packages to available packages database
         db.populate_available_packages();
         db
     }
@@ -70,7 +70,7 @@ impl PackageDatabase {
                 let mut db: PackageDatabase = serde_json::from_str(&content)
                     .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
 
-                // Если available пуст, заполняем его
+                // If available packages is empty, populate it
                 if db.available.is_empty() {
                     db.populate_available_packages();
                 }
@@ -92,7 +92,7 @@ impl PackageDatabase {
 
     fn install_package(&mut self, name: &str, version: Option<&str>) -> Result<(), String> {
         if self.installed.contains_key(name) {
-            return Err(format!("Пакет '{}' уже установлен", name));
+            return Err(format!("Package '{}' is already installed", name));
         }
 
         let package = match self.available.get(name) {
@@ -109,14 +109,14 @@ impl PackageDatabase {
                 Package {
                     name: name.to_string(),
                     version: version.to_string(),
-                    description: "Пользовательский пакет".to_string(),
+                    description: "Custom package".to_string(),
                 }
             }
         };
 
         self.installed.insert(name.to_string(), package);
         println!(
-            "✓ Пакет '{}' версии {} успешно установлен",
+            "✓ Package '{}' version {} successfully installed",
             name,
             version.unwrap_or("0.1.0")
         );
@@ -127,23 +127,26 @@ impl PackageDatabase {
         match self.installed.remove(name) {
             Some(package) => {
                 println!(
-                    "✓ Пакет '{}' версии {} успешно удален",
+                    "✓ Package '{}' version {} successfully removed",
                     package.name, package.version
                 );
                 Ok(())
             }
-            None => Err(format!("Пакет '{}' не найден среди установленных", name)),
+            None => Err(format!(
+                "Package '{}' not found among installed packages",
+                name
+            )),
         }
     }
 
     fn list_installed(&self) {
         if self.installed.is_empty() {
-            println!("Установленных пакетов нет");
+            println!("No installed packages");
             return;
         }
 
-        println!("Установленные пакеты:");
-        println!("{:<20} {:<15} {}", "Название", "Версия", "Описание");
+        println!("Installed packages:");
+        println!("{:<20} {:<15} {}", "Name", "Version", "Description");
         println!("{:-<60}", "");
 
         let mut packages: Vec<_> = self.installed.values().collect();
@@ -158,8 +161,8 @@ impl PackageDatabase {
     }
 
     fn list_available(&self) {
-        println!("Доступные пакеты:");
-        println!("{:<20} {:<15} {}", "Название", "Версия", "Описание");
+        println!("Available packages:");
+        println!("{:<20} {:<15} {}", "Name", "Version", "Description");
         println!("{:-<60}", "");
 
         let mut packages: Vec<_> = self.available.values().collect();
@@ -167,7 +170,7 @@ impl PackageDatabase {
 
         for package in packages {
             let status = if self.installed.contains_key(&package.name) {
-                " [УСТАНОВЛЕН]"
+                " [INSTALLED]"
             } else {
                 ""
             };
@@ -183,7 +186,7 @@ impl PackageDatabase {
         let query_lower = query.to_lowercase();
         let mut results = Vec::new();
 
-        // Поиск среди доступных пакетов
+        // Search among available packages
         for package in self.available.values() {
             if package.name.to_lowercase().contains(&query_lower)
                 || package.description.to_lowercase().contains(&query_lower)
@@ -192,7 +195,7 @@ impl PackageDatabase {
             }
         }
 
-        // Поиск среди установленных пакетов
+        // Search among installed packages
         for package in self.installed.values() {
             if (package.name.to_lowercase().contains(&query_lower)
                 || package.description.to_lowercase().contains(&query_lower))
@@ -208,20 +211,20 @@ impl PackageDatabase {
 }
 
 fn print_help() {
-    println!("Простой пакетный менеджер на Rust");
-    println!("Использование:");
-    println!("  install <название> [версия]  - Установить пакет");
-    println!("  remove <название>            - Удалить пакет");
-    println!("  list                         - Показать установленные пакеты");
-    println!("  available                    - Показать доступные пакеты");
-    println!("  search <запрос>              - Поиск пакетов");
-    println!("  help                         - Показать эту справку");
-    println!("  exit                         - Выйти из программы");
+    println!("Simple Package Manager written in Rust");
+    println!("Usage:");
+    println!("  install <name> [version]     - Install package");
+    println!("  remove <name>                - Remove package");
+    println!("  list                         - Show installed packages");
+    println!("  available                    - Show available packages");
+    println!("  search <query>               - Search packages");
+    println!("  help                         - Show this help");
+    println!("  exit                         - Exit the program");
 }
 
 fn main() -> io::Result<()> {
-    println!("🦀 Добро пожаловать в Rust Package Manager!");
-    println!("Введите 'help' для справки\n");
+    println!("🦀 Welcome to Rust Package Manager!");
+    println!("Type 'help' for help\n");
 
     let mut db = PackageDatabase::load_from_file()?;
 
@@ -243,7 +246,7 @@ fn main() -> io::Result<()> {
         match command {
             "install" => {
                 if parts.len() < 2 {
-                    println!("❌ Ошибка: укажите название пакета");
+                    println!("❌ Error: please specify package name");
                     continue;
                 }
                 let package_name = parts[1];
@@ -252,15 +255,15 @@ fn main() -> io::Result<()> {
                 match db.install_package(package_name, version) {
                     Ok(_) => {
                         if let Err(e) = db.save_to_file() {
-                            println!("⚠️ Предупреждение: не удалось сохранить изменения: {}", e);
+                            println!("⚠️ Warning: failed to save changes: {}", e);
                         }
                     }
-                    Err(e) => println!("❌ Ошибка: {}", e),
+                    Err(e) => println!("❌ Error: {}", e),
                 }
             }
             "remove" => {
                 if parts.len() < 2 {
-                    println!("❌ Ошибка: укажите название пакета");
+                    println!("❌ Error: please specify package name");
                     continue;
                 }
                 let package_name = parts[1];
@@ -268,10 +271,10 @@ fn main() -> io::Result<()> {
                 match db.remove_package(package_name) {
                     Ok(_) => {
                         if let Err(e) = db.save_to_file() {
-                            println!("⚠️ Предупреждение: не удалось сохранить изменения: {}", e);
+                            println!("⚠️ Warning: failed to save changes: {}", e);
                         }
                     }
-                    Err(e) => println!("❌ Ошибка: {}", e),
+                    Err(e) => println!("❌ Error: {}", e),
                 }
             }
             "list" => {
@@ -282,22 +285,22 @@ fn main() -> io::Result<()> {
             }
             "search" => {
                 if parts.len() < 2 {
-                    println!("❌ Ошибка: укажите поисковый запрос");
+                    println!("❌ Error: please specify search query");
                     continue;
                 }
                 let query = parts[1..].join(" ");
                 let results = db.search_packages(&query);
 
                 if results.is_empty() {
-                    println!("Пакеты по запросу '{}' не найдены", query);
+                    println!("No packages found for query '{}'", query);
                 } else {
-                    println!("Найденные пакеты по запросу '{}':", query);
-                    println!("{:<20} {:<15} {}", "Название", "Версия", "Описание");
+                    println!("Found packages for query '{}':", query);
+                    println!("{:<20} {:<15} {}", "Name", "Version", "Description");
                     println!("{:-<60}", "");
 
                     for package in results {
                         let status = if db.installed.contains_key(&package.name) {
-                            " [УСТАНОВЛЕН]"
+                            " [INSTALLED]"
                         } else {
                             ""
                         };
@@ -313,16 +316,16 @@ fn main() -> io::Result<()> {
                 print_help();
             }
             "exit" => {
-                println!("До свидания! 👋");
+                println!("Goodbye! 👋");
                 break;
             }
             _ => {
-                println!("❌ Неизвестная команда: '{}'", command);
-                println!("Введите 'help' для справки");
+                println!("❌ Unknown command: '{}'", command);
+                println!("Type 'help' for help");
             }
         }
 
-        println!(); // Пустая строка для лучшей читаемости
+        println!(); // Empty line for better readability
     }
 
     Ok(())
@@ -358,18 +361,18 @@ mod tests {
     fn test_package_installation() {
         let mut db = PackageDatabase::new();
 
-        // Тест установки существующего пакета
+        // Test installing existing package
         let result = db.install_package("firefox", None);
         assert!(result.is_ok());
         assert!(db.installed.contains_key("firefox"));
         assert_eq!(db.installed.get("firefox").unwrap().version, "0.1.0");
 
-        // Тест установки с указанной версией
+        // Test installing with specified version
         let result = db.install_package("python", Some("3.9.0"));
         assert!(result.is_ok());
         assert_eq!(db.installed.get("python").unwrap().version, "3.9.0");
 
-        // Тест повторной установки
+        // Test duplicate installation
         let result = db.install_package("firefox", None);
         assert!(result.is_err());
     }
@@ -378,16 +381,16 @@ mod tests {
     fn test_package_removal() {
         let mut db = PackageDatabase::new();
 
-        // Установим пакет
+        // Install package
         db.install_package("firefox", None).unwrap();
         assert!(db.installed.contains_key("firefox"));
 
-        // Удалим пакет
+        // Remove package
         let result = db.remove_package("firefox");
         assert!(result.is_ok());
         assert!(!db.installed.contains_key("firefox"));
 
-        // Попытка удалить несуществующий пакет
+        // Try to remove non-existent package
         let result = db.remove_package("nonexistent");
         assert!(result.is_err());
     }
@@ -397,17 +400,17 @@ mod tests {
         let mut db = PackageDatabase::new();
         db.install_package("python", Some("3.9.0")).unwrap();
 
-        // Поиск по названию
+        // Search by name
         let results = db.search_packages("python");
         assert!(!results.is_empty());
         assert!(results.iter().any(|p| p.name.contains("python")));
 
-        // Поиск по описанию
+        // Search by description
         let results = db.search_packages("browser");
         assert!(!results.is_empty());
         assert!(results.iter().any(|p| p.description.contains("browser")));
 
-        // Поиск несуществующего
+        // Search for non-existent
         let results = db.search_packages("nonexistent_package_xyz");
         assert!(results.is_empty());
     }
@@ -416,21 +419,21 @@ mod tests {
     fn test_custom_package_installation() {
         let mut db = PackageDatabase::new();
 
-        // Установка пользовательского пакета
+        // Install custom package
         let result = db.install_package("my_custom_app", Some("2.0.0"));
         assert!(result.is_ok());
 
         let installed_package = db.installed.get("my_custom_app").unwrap();
         assert_eq!(installed_package.name, "my_custom_app");
         assert_eq!(installed_package.version, "2.0.0");
-        assert_eq!(installed_package.description, "Пользовательский пакет");
+        assert_eq!(installed_package.description, "Custom package");
     }
 
     #[test]
     fn test_default_version_assignment() {
         let mut db = PackageDatabase::new();
 
-        // Установка без указания версии
+        // Install without specifying version
         db.install_package("test_app", None).unwrap();
 
         let installed_package = db.installed.get("test_app").unwrap();
